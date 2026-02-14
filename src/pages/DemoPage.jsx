@@ -160,7 +160,7 @@ export default function DemoPage() {
       {/* Main Content Area */}
       <div className="flex-1 flex flex-col min-w-0">
         {/* Header */}
-        <header className="bg-white border-b border-gray-200 shadow-sm flex-shrink-0 h-20 sticky top-0 z-30">
+        <header className="bg-white border-b border-gray-200 shadow-sm flex-shrink-0 h-20 sticky top-0 z-20">
           <div className="h-full px-6 flex items-center justify-between">
             <div className="flex items-center gap-4">
               {/* Mobile menu toggle */}
@@ -305,7 +305,7 @@ export default function DemoPage() {
             {/* Two Column Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Left Column - Main Content */}
-              <div className="lg:col-span-2 space-y-6">
+              <div className={`space-y-6 ${conversationsOpen ? 'lg:col-span-3' : 'lg:col-span-2'}`}>
                 {/* Welcome Card */}
                 <div className="bg-gradient-to-br from-indigo-600 via-purple-600 to-pink-500 rounded-xl shadow-lg p-8 text-white">
                   <div className="flex items-center justify-between">
@@ -359,23 +359,26 @@ export default function DemoPage() {
                 </div>
               </div>
 
-              {/* Right Column - Clinical Sidebar */}
-              <div className="lg:col-span-1">
-                <div className="sticky top-24">
-                  <ClinicalSidebar
-                    patient={mockPatientData.patient}
-                    medications={mockPatientData.medications}
-                    conditions={mockPatientData.conditions}
-                    allergies={mockPatientData.allergies}
-                    vitals={mockPatientData.vitals}
-                    labs={mockPatientData.labs}
-                    loading={false}
-                    error={null}
-                    isOpen={sidebarOpen}
-                    onToggle={() => setSidebarOpen(!sidebarOpen)}
-                  />
+              {/* Right Column - Clinical Sidebar (hidden when conversations open) */}
+              {!conversationsOpen && (
+                <div className="lg:col-span-1">
+                  <div className="sticky top-24">
+                    <ClinicalSidebar
+                      patient={mockPatientData.patient}
+                      medications={mockPatientData.medications}
+                      conditions={mockPatientData.conditions}
+                      allergies={mockPatientData.allergies}
+                      vitals={mockPatientData.vitals}
+                      labs={mockPatientData.labs}
+                      loading={false}
+                      error={null}
+                      isOpen={sidebarOpen}
+                      onToggle={() => setSidebarOpen(!sidebarOpen)}
+                      hideToggle={conversationsOpen}
+                    />
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
         </main>

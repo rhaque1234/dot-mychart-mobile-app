@@ -103,7 +103,7 @@ export default function NavigationSidebar({ isOpen, onClose }) {
       {/* Overlay for mobile */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-40 lg:hidden"
+          className="fixed inset-0 bg-black/50 z-[45] lg:hidden"
           onClick={onClose}
         />
       )}
@@ -112,7 +112,7 @@ export default function NavigationSidebar({ isOpen, onClose }) {
       <aside
         className={`
           fixed top-0 left-0 h-full bg-gradient-to-b from-indigo-900 via-indigo-800 to-purple-900
-          shadow-2xl z-50 transition-transform duration-300 ease-in-out
+          shadow-2xl z-[55] transition-transform duration-300 ease-in-out
           ${isOpen ? 'translate-x-0' : '-translate-x-full'}
           lg:translate-x-0 lg:static lg:z-auto
         `}

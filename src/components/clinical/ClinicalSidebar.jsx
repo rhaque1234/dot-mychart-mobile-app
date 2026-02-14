@@ -18,24 +18,27 @@ export default function ClinicalSidebar({
   error,
   isOpen,
   onToggle,
+  hideToggle = false,
 }) {
   return (
     <>
       {/* Mobile toggle button */}
-      <button
-        onClick={onToggle}
-        className="lg:hidden fixed bottom-6 right-6 z-50 bg-gradient-to-r from-emerald-500 to-green-500 text-white p-4 rounded-full shadow-2xl hover:shadow-emerald-500/50 transition-all border-2 border-white hover:scale-110"
-        aria-label="Toggle clinical sidebar"
-      >
-        <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/>
-        </svg>
-      </button>
+      {!hideToggle && (
+        <button
+          onClick={onToggle}
+          className="lg:hidden fixed bottom-6 right-6 z-40 bg-gradient-to-r from-emerald-500 to-green-500 text-white p-4 rounded-full shadow-2xl hover:shadow-emerald-500/50 transition-all border-2 border-white hover:scale-110"
+          aria-label="Toggle clinical sidebar"
+        >
+          <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
+            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/>
+          </svg>
+        </button>
+      )}
 
       {/* Sidebar panel */}
       <aside
         className={`
-          fixed inset-y-0 right-0 z-40 w-80 bg-white border-l border-gray-200 shadow-2xl transform transition-transform duration-300 lg:relative lg:translate-x-0 lg:w-auto lg:shadow-none lg:z-auto lg:border-0
+          fixed inset-y-0 right-0 z-[35] w-80 bg-white border-l border-gray-200 shadow-2xl transform transition-transform duration-300 lg:relative lg:translate-x-0 lg:w-auto lg:shadow-none lg:z-auto lg:border-0
           ${isOpen ? 'translate-x-0' : 'translate-x-full'}
         `}
       >

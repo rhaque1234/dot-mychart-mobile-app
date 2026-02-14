@@ -1,3 +1,7 @@
+/**
+ * Smart FHIR Dashboard Application
+ * SMART on FHIR enabled patient dashboard with OAuth2 integration
+ */
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import LaunchPage from './pages/LaunchPage'
 import RedirectPage from './pages/RedirectPage'

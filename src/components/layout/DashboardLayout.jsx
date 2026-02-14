@@ -83,44 +83,56 @@ export default function DashboardLayout({ client }) {
   // Show loading state while FHIR data is being fetched
   if (clinicalData.loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 to-blue-50">
-        <LoadingSpinner message="Loading patient data from FHIR server..." />
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="bg-white p-12 rounded-xl shadow-2xl border-2 border-blue-200">
+          <LoadingSpinner message="Loading patient data from FHIR server..." />
+        </div>
       </div>
     )
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-50 to-blue-50 flex flex-col">
-      {/* Header */}
-      <header className="bg-white border-b border-gray-200 shadow-sm flex-shrink-0">
-        <div className="max-w-[1600px] mx-auto px-6 py-3 flex items-center justify-between">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-sm shadow-sm">
-              D
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      {/* Professional Medical Header */}
+      <header className="bg-white border-b-2 border-blue-600 shadow-sm flex-shrink-0">
+        <div className="max-w-[1800px] mx-auto px-6 py-4 flex items-center justify-between">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-md bg-gradient-to-br from-blue-600 to-blue-700 flex items-center justify-center text-white font-bold text-lg shadow-md">
+              <svg className="w-7 h-7" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-1 11h-4v4h-4v-4H6v-4h4V6h4v4h4v4z"/>
+              </svg>
             </div>
             <div>
-              <h1 className="text-lg font-bold text-gray-900">
-                Dot Caregiver Developer Console
+              <h1 className="text-xl font-bold text-gray-900 tracking-tight">
+                Clinical Care Dashboard
               </h1>
-              <p className="text-xs text-gray-500">
-                Connected to{' '}
-                <span className="font-mono text-gray-600">
-                  {client.state.serverUrl}
-                </span>
+              <p className="text-xs text-gray-600 font-medium">
+                FHIR-Enabled Patient Management System
               </p>
             </div>
           </div>
-          <div className="hidden sm:flex items-center gap-2 text-xs text-gray-500">
-            <span className="w-2 h-2 rounded-full bg-green-400" />
-            FHIR R4 &middot; Patient {client.patient?.id?.slice(0, 8)}...
+          <div className="hidden md:flex items-center gap-6">
+            <div className="text-right">
+              <p className="text-xs text-gray-500 uppercase tracking-wide font-semibold">FHIR Server</p>
+              <p className="text-xs font-mono text-gray-700 mt-0.5">
+                {client.state.serverUrl.replace('https://', '').split('/')[0]}
+              </p>
+            </div>
+            <div className="h-10 w-px bg-gray-300"></div>
+            <div className="flex items-center gap-2">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse shadow-sm" />
+                <span className="text-xs font-semibold text-green-700">Connected</span>
+              </div>
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main two-panel layout */}
-      <main className="flex-1 flex flex-col lg:flex-row overflow-hidden max-w-[1600px] mx-auto w-full p-4 gap-4">
+      <main className="flex-1 flex flex-col lg:flex-row overflow-hidden max-w-[1800px] mx-auto w-full p-6 gap-6">
         {/* Chat panel - takes 2/3 on desktop */}
-        <div className="flex-1 lg:w-2/3 min-h-0 flex flex-col" style={{ height: 'calc(100vh - 80px)' }}>
+        <div className="flex-1 lg:w-2/3 min-h-0 flex flex-col shadow-lg rounded-lg overflow-hidden" style={{ height: 'calc(100vh - 96px)' }}>
           <ChatPanel
             messages={messages}
             onSendMessage={handleSendMessage}
@@ -131,8 +143,8 @@ export default function DashboardLayout({ client }) {
         </div>
 
         {/* Clinical sidebar - takes 1/3 on desktop */}
-        <div className="hidden lg:block lg:w-1/3 lg:max-w-md" style={{ height: 'calc(100vh - 80px)', overflowY: 'auto' }}>
-          <div className="space-y-4 chat-scroll h-full overflow-y-auto">
+        <div className="hidden lg:block lg:w-1/3 lg:max-w-lg" style={{ height: 'calc(100vh - 96px)', overflowY: 'auto' }}>
+          <div className="space-y-4 chat-scroll h-full overflow-y-auto pr-2">
             <ClinicalSidebar
               patient={clinicalData.patient}
               medications={clinicalData.medications}

@@ -5,12 +5,14 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import LaunchPage from './pages/LaunchPage'
 import RedirectPage from './pages/RedirectPage'
+import DemoPage from './pages/DemoPage'
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
         <Route path="/launch" element={<LaunchPage />} />
+        <Route path="/demo" element={<DemoPage />} />
         <Route path="/" element={<RedirectPage />} />
       </Routes>
     </BrowserRouter>

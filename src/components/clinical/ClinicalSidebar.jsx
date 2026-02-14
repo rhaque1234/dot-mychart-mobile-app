@@ -24,7 +24,7 @@ export default function ClinicalSidebar({
       {/* Mobile toggle button */}
       <button
         onClick={onToggle}
-        className="lg:hidden fixed bottom-20 right-4 z-50 bg-blue-600 text-white p-4 rounded-full shadow-2xl hover:bg-blue-700 transition-all border-2 border-white hover:scale-110"
+        className="lg:hidden fixed bottom-6 right-6 z-50 bg-gradient-to-r from-emerald-500 to-green-500 text-white p-4 rounded-full shadow-2xl hover:shadow-emerald-500/50 transition-all border-2 border-white hover:scale-110"
         aria-label="Toggle clinical sidebar"
       >
         <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 24 24">
@@ -35,16 +35,16 @@ export default function ClinicalSidebar({
       {/* Sidebar panel */}
       <aside
         className={`
-          fixed inset-y-0 right-0 z-40 w-80 bg-gradient-to-b from-blue-50 to-gray-50 border-l-2 border-blue-300 shadow-2xl transform transition-transform duration-300 lg:relative lg:translate-x-0 lg:w-auto lg:shadow-lg lg:z-auto
+          fixed inset-y-0 right-0 z-40 w-80 bg-white border-l border-gray-200 shadow-2xl transform transition-transform duration-300 lg:relative lg:translate-x-0 lg:w-auto lg:shadow-none lg:z-auto lg:border-0
           ${isOpen ? 'translate-x-0' : 'translate-x-full'}
         `}
       >
         {/* Mobile close button */}
-        <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b-2 border-blue-300 bg-blue-600">
-          <span className="text-sm font-bold text-white uppercase tracking-wide">Clinical Context</span>
+        <div className="lg:hidden flex items-center justify-between px-4 py-3 border-b border-gray-200 bg-gradient-to-r from-indigo-600 to-purple-600">
+          <span className="text-sm font-bold text-white uppercase tracking-wide">Clinical Data</span>
           <button
             onClick={onToggle}
-            className="text-white hover:text-blue-100"
+            className="text-white hover:text-indigo-100"
           >
             <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
               <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -52,7 +52,7 @@ export default function ClinicalSidebar({
           </button>
         </div>
 
-        <div className="h-full overflow-y-auto p-4 space-y-4 chat-scroll">
+        <div className="h-full overflow-y-auto p-4 space-y-4 chat-scroll bg-gray-50">
           {loading ? (
             <div className="flex justify-center py-8">
               <LoadingSpinner message="Loading clinical data..." />

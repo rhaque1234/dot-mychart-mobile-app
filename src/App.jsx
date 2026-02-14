@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import LaunchPage from './pages/LaunchPage'
 import RedirectPage from './pages/RedirectPage'
 import DemoPage from './pages/DemoPage'
+import PatientApp from './pages/PatientApp'
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
       <Routes>
         <Route path="/launch" element={<LaunchPage />} />
         <Route path="/demo" element={<DemoPage />} />
+        <Route path="/patient-app" element={<PatientApp />} />
         <Route path="/" element={<RedirectPage />} />
       </Routes>
     </BrowserRouter>

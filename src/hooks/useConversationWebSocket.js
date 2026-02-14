@@ -61,6 +61,17 @@ export default function useConversationWebSocket() {
               }
               return updated
             })
+
+            // Also update currentSession if this event belongs to it
+            setCurrentSession(prev => {
+              if (prev && prev.session_id === data.session_id) {
+                return {
+                  ...prev,
+                  events: [...(prev.events || []), data.event]
+                }
+              }
+              return prev
+            })
           } else if (data.type === 'error') {
             setError(data.message)
           }

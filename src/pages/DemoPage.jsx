@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import ClinicalSidebar from '../components/clinical/ClinicalSidebar'
 import NavigationSidebar from '../components/navigation/NavigationSidebar'
+import ChatLogs from '../components/chat/ChatLogs'
 import LoadingSpinner from '../components/ui/LoadingSpinner'
 
 // Mock patient data to showcase the beautified UI
@@ -342,6 +343,9 @@ export default function DemoPage() {
                     </div>
                   </div>
                 </div>
+
+                {/* Dot Chat Logs */}
+                <ChatLogs />
               </div>
 
               {/* Right Column - Clinical Sidebar */}

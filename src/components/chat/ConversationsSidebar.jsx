@@ -134,19 +134,19 @@ export default function ConversationsSidebar({ isOpen, onClose }) {
 
   return (
     <>
-      {/* Overlay for mobile */}
+      {/* Overlay - shows when sidebar is open */}
       {isOpen && (
         <div
-          className="fixed inset-0 bg-black/50 z-[60] lg:hidden"
+          className="fixed inset-0 bg-black/50 z-[60]"
           onClick={onClose}
         />
       )}
 
-      {/* Sidebar */}
+      {/* Sidebar - Always fixed, slides in from right */}
       <aside
         className={`
           fixed top-0 right-0 h-full bg-white shadow-2xl z-[70] transition-transform duration-300 ease-in-out
-          ${isOpen ? 'translate-x-0' : 'translate-x-full lg:translate-x-0'}
+          ${isOpen ? 'translate-x-0' : 'translate-x-full'}
         `}
         style={{ width: '900px', maxWidth: '100vw' }}
       >

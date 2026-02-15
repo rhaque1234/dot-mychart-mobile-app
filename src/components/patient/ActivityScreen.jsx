@@ -1,8 +1,11 @@
 import { useState } from 'react'
-import { adherenceCalendar, monthlyStats } from '../../lib/mockPatientData'
+import { getMonthlyAdherenceData } from '../../lib/mockPatientData'
 
 export default function ActivityScreen({ conversations, currentSession }) {
-  const [currentMonth, setCurrentMonth] = useState(0)
+  const [currentMonthOffset, setCurrentMonthOffset] = useState(0)
+
+  // Get month data based on offset
+  const monthData = getMonthlyAdherenceData(currentMonthOffset)
 
   const getStatusColor = (status) => {
     switch (status) {
@@ -24,12 +27,12 @@ export default function ActivityScreen({ conversations, currentSession }) {
     const days = []
 
     // Add empty cells for days before the month starts
-    for (let i = 0; i < adherenceCalendar.firstDayOfWeek; i++) {
+    for (let i = 0; i < monthData.firstDayOfWeek; i++) {
       days.push(null)
     }
 
     // Add actual days of the month
-    for (let day = 1; day <= adherenceCalendar.daysInMonth; day++) {
+    for (let day = 1; day <= monthData.daysInMonth; day++) {
       days.push(day)
     }
 
@@ -39,20 +42,33 @@ export default function ActivityScreen({ conversations, currentSession }) {
   const calendarDays = generateCalendarDays()
 
   // Calculate summary stats
-  const totalDays = adherenceCalendar.daysInMonth
-  const onTimeDays = Object.values(adherenceCalendar.statuses).filter(s => s === 'on-time').length
-  const lateDays = Object.values(adherenceCalendar.statuses).filter(s => s === 'late').length
-  const missedDays = Object.values(adherenceCalendar.statuses).filter(s => s === 'missed').length
+  const totalDays = monthData.daysTracked || monthData.daysInMonth
+  const onTimeDays = Object.values(monthData.statuses).filter(s => s === 'on-time').length
+  const lateDays = Object.values(monthData.statuses).filter(s => s === 'late').length
+  const missedDays = Object.values(monthData.statuses).filter(s => s === 'missed').length
 
-  const onTimePercent = Math.round((onTimeDays / totalDays) * 100)
-  const latePercent = Math.round((lateDays / totalDays) * 100)
-  const missedPercent = Math.round((missedDays / totalDays) * 100)
+  const onTimePercent = totalDays > 0 ? Math.round((onTimeDays / totalDays) * 100) : 0
+  const latePercent = totalDays > 0 ? Math.round((lateDays / totalDays) * 100) : 0
+  const missedPercent = totalDays > 0 ? Math.round((missedDays / totalDays) * 100) : 0
 
   const summary = {
     'On-time': { percent: onTimePercent, color: 'bg-gray-900' },
     'Late': { percent: latePercent, color: 'bg-gray-600' },
     'Missed': { percent: missedPercent, color: 'bg-red-500' }
   }
+
+  const handlePrevMonth = () => {
+    setCurrentMonthOffset(prev => prev - 1)
+  }
+
+  const handleNextMonth = () => {
+    setCurrentMonthOffset(prev => prev + 1)
+  }
+
+  // Today's date for highlighting
+  const today = new Date(2026, 1, 14) // Feb 14, 2026
+  const isCurrentMonth = monthData.monthIndex === today.getMonth() && monthData.year === today.getFullYear()
+  const todayDate = isCurrentMonth ? today.getDate() : -1
 
   return (
     <div className="flex-1 overflow-auto bg-[#FFFEF7] pb-20">
@@ -65,20 +81,22 @@ export default function ActivityScreen({ conversations, currentSession }) {
           {/* Month Navigation - minimal with border */}
           <div className="flex items-center justify-between border-2 border-black px-6 py-4">
             <button
-              onClick={() => setCurrentMonth(currentMonth - 1)}
+              onClick={handlePrevMonth}
               className="p-2 hover:bg-black hover:text-white transition-colors"
+              disabled={currentMonthOffset <= -2}
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M15 19l-7-7 7-7" />
               </svg>
             </button>
             <div className="text-center">
-              <span className="text-lg font-bold text-black">{adherenceCalendar.month}: </span>
-              <span className="text-lg font-bold text-black">{adherenceCalendar.adherence}</span>
+              <span className="text-lg font-bold text-black">{monthData.month}: </span>
+              <span className="text-lg font-bold text-black">{monthData.adherence}</span>
             </div>
             <button
-              onClick={() => setCurrentMonth(currentMonth + 1)}
+              onClick={handleNextMonth}
               className="p-2 hover:bg-black hover:text-white transition-colors"
+              disabled={currentMonthOffset >= 1}
             >
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -107,9 +125,9 @@ export default function ActivityScreen({ conversations, currentSession }) {
                 return <div key={index} className="aspect-square"></div>
               }
 
-              const status = adherenceCalendar.statuses[day]
+              const status = monthData.statuses[day]
               const colorClass = getStatusColor(status)
-              const isToday = day === 14 // Today is Feb 14, 2026
+              const isToday = day === todayDate
 
               return (
                 <button
@@ -180,11 +198,11 @@ export default function ActivityScreen({ conversations, currentSession }) {
         {/* Additional Stats - Minimal black cards */}
         <div className="grid grid-cols-2 gap-4">
           <div className="bg-black p-6 text-center text-white">
-            <div className="text-4xl font-bold mb-2">{monthlyStats.daysTracked}</div>
+            <div className="text-4xl font-bold mb-2">{monthData.daysTracked || totalDays}</div>
             <div className="text-sm font-medium text-gray-300 uppercase tracking-wider">Days tracked</div>
           </div>
           <div className="bg-black p-6 text-center text-white">
-            <div className="text-4xl font-bold mb-2">{monthlyStats.currentStreak}</div>
+            <div className="text-4xl font-bold mb-2">{monthData.currentStreak || 0}</div>
             <div className="text-sm font-medium text-gray-300 uppercase tracking-wider">Current streak</div>
           </div>
         </div>

@@ -1,19 +1,31 @@
 import { useState } from 'react'
-import { weeklyAdherence, monthlyStats } from '../../lib/mockPatientData'
+import { weeklyAdherenceData, monthlyPeriodData, monthlyStats } from '../../lib/mockPatientData'
 
 export default function InsightsScreen() {
   const [viewPeriod, setViewPeriod] = useState('week')
   const [currentWeek, setCurrentWeek] = useState(0)
 
-  const adherencePercent = weeklyAdherence.adherencePercent
-  const doseTaken = weeklyAdherence.dosesTaken
-  const doseSkipped = weeklyAdherence.dosesSkipped
+  // Get data based on current selection
+  const weekData = weeklyAdherenceData[currentWeek] || weeklyAdherenceData[0]
+  const monthData = monthlyPeriodData[currentWeek < -1 ? '-1' : '0']
+
+  const adherencePercent = viewPeriod === 'week' ? weekData.adherencePercent : monthData.adherencePercent
+  const doseTaken = viewPeriod === 'week' ? weekData.dosesTaken : monthData.dosesTaken
+  const doseSkipped = viewPeriod === 'week' ? weekData.dosesSkipped : monthData.dosesSkipped
 
   const getDateRange = () => {
     if (viewPeriod === 'week') {
-      return weeklyAdherence.week
+      return weekData.week
     }
     return 'February 2026'
+  }
+
+  const handlePrevWeek = () => {
+    setCurrentWeek(prev => prev - 1)
+  }
+
+  const handleNextWeek = () => {
+    setCurrentWeek(prev => prev + 1)
   }
 
   return (
@@ -54,8 +66,9 @@ export default function InsightsScreen() {
           {/* Date Navigation - minimal with border */}
           <div className="flex items-center justify-between border-2 border-black px-6 py-4">
             <button
-              onClick={() => setCurrentWeek(currentWeek - 1)}
+              onClick={handlePrevWeek}
               className="p-2 hover:bg-black hover:text-white transition-colors"
+              disabled={currentWeek <= -2}
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M15 19l-7-7 7-7" />
@@ -63,8 +76,9 @@ export default function InsightsScreen() {
             </button>
             <span className="text-lg font-bold text-black">{getDateRange()}</span>
             <button
-              onClick={() => setCurrentWeek(currentWeek + 1)}
+              onClick={handleNextWeek}
               className="p-2 hover:bg-black hover:text-white transition-colors"
+              disabled={currentWeek >= 1}
             >
               <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="square" strokeLinejoin="miter" strokeWidth={2} d="M9 5l7 7-7 7" />
@@ -74,39 +88,39 @@ export default function InsightsScreen() {
         </div>
       </div>
 
-      {/* Progress Ring - Minimal with large percentage */}
-      <div className="max-w-md mx-auto px-8 py-12">
-        <div className="border-2 border-black p-12 mb-8">
-          <div className="relative flex items-center justify-center mb-12">
-            {/* SVG Progress Ring - Simple black stroke */}
-            <svg className="w-64 h-64 transform -rotate-90">
+      {/* Progress Ring - Smaller size */}
+      <div className="max-w-md mx-auto px-8 py-8">
+        <div className="border-2 border-black p-8 mb-8">
+          <div className="relative flex items-center justify-center mb-8">
+            {/* SVG Progress Ring - Reduced size */}
+            <svg className="w-48 h-48 transform -rotate-90">
               {/* Background circle */}
               <circle
-                cx="128"
-                cy="128"
-                r="100"
+                cx="96"
+                cy="96"
+                r="75"
                 stroke="#D1D5DB"
-                strokeWidth="12"
+                strokeWidth="10"
                 fill="none"
               />
               {/* Progress circle - Black */}
               <circle
-                cx="128"
-                cy="128"
-                r="100"
+                cx="96"
+                cy="96"
+                r="75"
                 stroke="#000000"
-                strokeWidth="12"
+                strokeWidth="10"
                 fill="none"
-                strokeDasharray={`${2 * Math.PI * 100}`}
-                strokeDashoffset={`${2 * Math.PI * 100 * (1 - adherencePercent / 100)}`}
+                strokeDasharray={`${2 * Math.PI * 75}`}
+                strokeDashoffset={`${2 * Math.PI * 75 * (1 - adherencePercent / 100)}`}
                 className="transition-all duration-1000"
               />
             </svg>
 
-            {/* Center Content - Large, bold percentage */}
+            {/* Center Content - Adjusted for smaller circle */}
             <div className="absolute inset-0 flex flex-col items-center justify-center">
-              <div className="text-8xl font-bold text-black mb-2 tracking-tighter">{adherencePercent}%</div>
-              <div className="text-lg font-medium text-gray-600 uppercase tracking-wider">Adherence</div>
+              <div className="text-6xl font-bold text-black mb-1 tracking-tighter">{adherencePercent}%</div>
+              <div className="text-sm font-medium text-gray-600 uppercase tracking-wider">Adherence</div>
             </div>
           </div>
         </div>
@@ -125,9 +139,9 @@ export default function InsightsScreen() {
 
         {/* Insights Section - Minimal list */}
         <div className="mb-12">
-          <h2 className="text-sm font-medium text-gray-600 uppercase tracking-wider mb-4">Insights from last week</h2>
+          <h2 className="text-sm font-medium text-gray-600 uppercase tracking-wider mb-4">Insights from this period</h2>
           <div className="space-y-3">
-            {weeklyAdherence.insights.map((insight, index) => (
+            {(viewPeriod === 'week' ? weekData.insights : monthData.insights).map((insight, index) => (
               <div key={index} className="border-2 border-gray-300 p-5">
                 <div className="flex items-start gap-4">
                   <div className="flex-shrink-0 mt-1 w-8 h-8 border-2 border-black bg-black flex items-center justify-center">
@@ -142,35 +156,37 @@ export default function InsightsScreen() {
           </div>
         </div>
 
-        {/* Weekly Breakdown - Clean bordered card */}
-        <div className="mb-12">
-          <h2 className="text-sm font-medium text-gray-600 uppercase tracking-wider mb-4">Weekly breakdown</h2>
-          <div className="border-2 border-black p-6">
-            <div className="space-y-5">
-              {weeklyAdherence.dailyBreakdown.map((day) => {
-                return (
-                  <div key={day.day}>
-                    <div className="flex items-center justify-between mb-2">
-                      <div className="flex items-center gap-4">
-                        <span className="text-sm font-bold text-black w-12">{day.day}</span>
-                        <span className="text-xs text-gray-600">{day.date}</span>
+        {/* Weekly/Daily Breakdown - Only show for week view */}
+        {viewPeriod === 'week' && (
+          <div className="mb-12">
+            <h2 className="text-sm font-medium text-gray-600 uppercase tracking-wider mb-4">Daily breakdown</h2>
+            <div className="border-2 border-black p-6">
+              <div className="space-y-5">
+                {weekData.dailyBreakdown.map((day) => {
+                  return (
+                    <div key={day.day}>
+                      <div className="flex items-center justify-between mb-2">
+                        <div className="flex items-center gap-4">
+                          <span className="text-sm font-bold text-black w-12">{day.day}</span>
+                          <span className="text-xs text-gray-600">{day.date}</span>
+                        </div>
+                        <span className="text-lg font-bold text-black">{day.percentage}%</span>
                       </div>
-                      <span className="text-lg font-bold text-black">{day.percentage}%</span>
+                      <div className="w-full bg-gray-200 h-2">
+                        <div
+                          className={`h-2 transition-all duration-500 ${
+                            day.percentage === 100 ? 'bg-black' : 'bg-gray-400'
+                          }`}
+                          style={{ width: `${day.percentage}%` }}
+                        ></div>
+                      </div>
                     </div>
-                    <div className="w-full bg-gray-200 h-2">
-                      <div
-                        className={`h-2 transition-all duration-500 ${
-                          day.percentage === 100 ? 'bg-black' : 'bg-gray-400'
-                        }`}
-                        style={{ width: `${day.percentage}%` }}
-                      ></div>
-                    </div>
-                  </div>
-                )
-              })}
+                  )
+                })}
+              </div>
             </div>
           </div>
-        </div>
+        )}
 
         {/* Monthly Stats - Minimal black cards */}
         <div className="grid grid-cols-2 gap-4">

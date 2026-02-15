@@ -31,14 +31,14 @@ function formatDate(date) {
 // Patient demographics
 export const patientData = {
   id: 'patient-001',
-  name: 'John Martinez',
-  firstName: 'John',
+  name: 'Sarah Martinez',
+  firstName: 'Sarah',
   birthDate: '1978-05-15',
   age: 47,
-  gender: 'male',
+  gender: 'female',
   mrn: 'MRN-8472651',
   phone: '(555) 234-5678',
-  email: 'john.martinez@email.com'
+  email: 'sarah.martinez@email.com'
 }
 
 // Medication schedule with adherence tracking
@@ -375,4 +375,171 @@ export function getGreeting() {
 export function calculateAdherence(taken, total) {
   if (total === 0) return 0
   return Math.round((taken / total) * 100)
+}
+
+// Dynamic adherence data for multiple weeks
+export const weeklyAdherenceData = {
+  // Week 0 (current week: Feb 8-14)
+  0: {
+    week: 'Feb 8 - 14',
+    adherencePercent: 94,
+    dosesTaken: 27,
+    dosesSkipped: 2,
+    dailyBreakdown: [
+      { day: 'Mon', date: 'Feb 8', percentage: 100 },
+      { day: 'Tue', date: 'Feb 9', percentage: 100 },
+      { day: 'Wed', date: 'Feb 10', percentage: 75 },
+      { day: 'Thu', date: 'Feb 11', percentage: 100 },
+      { day: 'Fri', date: 'Feb 12', percentage: 100 },
+      { day: 'Sat', date: 'Feb 13', percentage: 100 },
+      { day: 'Sun', date: 'Feb 14', percentage: 100 }
+    ],
+    insights: [
+      'You maintained a 14-day streak of morning medications',
+      'Evening doses taken 30 minutes earlier on average this week',
+      'Blood pressure readings show consistent improvement'
+    ]
+  },
+  // Week -1 (Feb 1-7)
+  '-1': {
+    week: 'Feb 1 - 7',
+    adherencePercent: 91,
+    dosesTaken: 26,
+    dosesSkipped: 3,
+    dailyBreakdown: [
+      { day: 'Mon', date: 'Feb 1', percentage: 100 },
+      { day: 'Tue', date: 'Feb 2', percentage: 100 },
+      { day: 'Wed', date: 'Feb 3', percentage: 75 },
+      { day: 'Thu', date: 'Feb 4', percentage: 100 },
+      { day: 'Fri', date: 'Feb 5', percentage: 75 },
+      { day: 'Sat', date: 'Feb 6', percentage: 100 },
+      { day: 'Sun', date: 'Feb 7', percentage: 100 }
+    ],
+    insights: [
+      'Good consistency with morning medications',
+      'Two evening doses were delayed this week',
+      'Consider setting a reminder for Wednesday evenings'
+    ]
+  },
+  // Week -2 (Jan 25-31)
+  '-2': {
+    week: 'Jan 25 - 31',
+    adherencePercent: 88,
+    dosesTaken: 25,
+    dosesSkipped: 4,
+    dailyBreakdown: [
+      { day: 'Mon', date: 'Jan 25', percentage: 100 },
+      { day: 'Tue', date: 'Jan 26', percentage: 75 },
+      { day: 'Wed', date: 'Jan 27', percentage: 100 },
+      { day: 'Thu', date: 'Jan 28', percentage: 75 },
+      { day: 'Fri', date: 'Jan 29', percentage: 100 },
+      { day: 'Sat', date: 'Jan 30', percentage: 100 },
+      { day: 'Sun', date: 'Jan 31', percentage: 100 }
+    ],
+    insights: [
+      'Adherence improved by end of week',
+      'Tuesday and Thursday showed some missed doses',
+      'Overall weekly pattern remains strong'
+    ]
+  },
+  // Week 1 (future: Feb 15-21)
+  '1': {
+    week: 'Feb 15 - 21',
+    adherencePercent: 96,
+    dosesTaken: 28,
+    dosesSkipped: 1,
+    dailyBreakdown: [
+      { day: 'Mon', date: 'Feb 15', percentage: 100 },
+      { day: 'Tue', date: 'Feb 16', percentage: 100 },
+      { day: 'Wed', date: 'Feb 17', percentage: 100 },
+      { day: 'Thu', date: 'Feb 18', percentage: 100 },
+      { day: 'Fri', date: 'Feb 19', percentage: 75 },
+      { day: 'Sat', date: 'Feb 20', percentage: 100 },
+      { day: 'Sun', date: 'Feb 21', percentage: 100 }
+    ],
+    insights: [
+      'Projected: Excellent adherence trend',
+      'Continue current routine for best results',
+      'Lab work scheduled for Thursday'
+    ]
+  }
+}
+
+// Monthly adherence data
+export function getMonthlyAdherenceData(monthOffset = 0) {
+  const baseDate = new Date(2026, 1, 14) // Feb 14, 2026
+  const targetDate = new Date(baseDate)
+  targetDate.setMonth(targetDate.getMonth() + monthOffset)
+
+  const year = targetDate.getFullYear()
+  const monthIndex = targetDate.getMonth()
+  const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                      'July', 'August', 'September', 'October', 'November', 'December']
+  const daysInMonth = new Date(year, monthIndex + 1, 0).getDate()
+  const firstDay = new Date(year, monthIndex, 1).getDay()
+  const firstDayOfWeek = (firstDay + 6) % 7 // Convert to Mon=0, Sun=6
+
+  // Generate realistic adherence data for each month
+  const monthlyData = {
+    0: { adherence: '94%', missedDays: [10], lateDays: [6], daysTracked: 14, streak: 11 },
+    '-1': { adherence: '91%', missedDays: [7, 14], lateDays: [3, 21], daysTracked: 31, streak: 8 },
+    '-2': { adherence: '88%', missedDays: [5, 18], lateDays: [12, 25], daysTracked: 31, streak: 6 },
+    '1': { adherence: '96%', missedDays: [], lateDays: [19], daysTracked: 0, streak: 0 }
+  }
+
+  const data = monthlyData[monthOffset] || monthlyData[0]
+
+  // Build statuses for all days
+  const statuses = {}
+  const today = new Date(2026, 1, 14) // Feb 14, 2026
+  const isCurrentMonth = monthIndex === today.getMonth() && year === today.getFullYear()
+  const todayDate = isCurrentMonth ? today.getDate() : -1
+
+  for (let day = 1; day <= daysInMonth; day++) {
+    if (isCurrentMonth && day > todayDate) {
+      statuses[day] = 'upcoming'
+    } else if (data.missedDays.includes(day)) {
+      statuses[day] = 'missed'
+    } else if (data.lateDays.includes(day)) {
+      statuses[day] = 'late'
+    } else {
+      statuses[day] = 'on-time'
+    }
+  }
+
+  return {
+    month: `${monthNames[monthIndex]} ${year}`,
+    year,
+    monthIndex,
+    adherence: data.adherence,
+    daysInMonth,
+    firstDayOfWeek,
+    statuses,
+    daysTracked: data.daysTracked,
+    currentStreak: data.streak
+  }
+}
+
+// Monthly period adherence (for week vs month toggle)
+export const monthlyPeriodData = {
+  0: {
+    adherencePercent: 92,
+    dosesTaken: 110,
+    dosesSkipped: 10,
+    insights: [
+      'Overall monthly adherence improved by 3% from last month',
+      'Morning medication consistency at 97%',
+      'Weekend adherence matches weekday performance'
+    ]
+  },
+  '-1': {
+    adherencePercent: 89,
+    dosesTaken: 105,
+    dosesSkipped: 15,
+    insights: [
+      'January showed good improvement in second half',
+      'Evening medications need more attention',
+      'Consider adjusting dinner reminders'
+    ]
+  }
 }

@@ -276,7 +276,7 @@ export default function ChatScreen({ currentSession, isConnected }) {
 
       {/* Voice Input - minimal with black border - positioned higher */}
       {activeTab === 'messages' && (
-        <div className="border-t-2 border-black bg-[#FFFEF7] px-4 pt-3 pb-20">
+        <div className="border-t-2 border-black bg-[#FFFEF7] px-4 pt-3 pb-24">
           <div className="max-w-md mx-auto">
             <div className="flex items-center gap-4 border-2 border-black px-6 py-4">
               <svg className="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

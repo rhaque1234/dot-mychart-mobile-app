@@ -11,9 +11,9 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['icon.svg', 'icon-192.png', 'icon-512.png'],
       manifest: {
-        name: 'Dot MyChart - Patient Health Tracker',
-        short_name: 'Dot MyChart',
-        description: 'Your personal health companion for medication tracking and check-ins with Dot',
+        name: '.dot - Your Health Companion',
+        short_name: '.dot',
+        description: 'Your personal health companion for medication tracking and check-ins with .dot',
         theme_color: '#111827',
         background_color: '#ffffff',
         display: 'standalone',

@@ -1,7 +1,7 @@
 import { useEffect, useState, useRef, useCallback } from 'react'
 
 // WebSocket server URL - can be configured via environment variable
-const WS_URL = import.meta.env.VITE_CONVERSATION_WS_URL || 'wss://0.0.0.0:8765'
+const WS_URL = import.meta.env.VITE_CONVERSATION_WS_URL || 'wss://10.19.177.103:8765'
 
 export default function useConversationWebSocket() {
   const [isConnected, setIsConnected] = useState(false)

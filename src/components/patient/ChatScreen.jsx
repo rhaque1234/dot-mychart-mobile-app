@@ -122,37 +122,47 @@ export default function ChatScreen({ currentSession, isConnected }) {
             {!isConnected ? (
               <div className="flex flex-col items-center justify-center h-full text-center p-8">
                 <div className="mb-8 animate-pulse">
-                  <svg viewBox="0 0 120 60" className="w-32 h-16">
-                    {/* Horizontal cylinder body */}
-                    <ellipse cx="15" cy="30" rx="6" ry="14" fill="none" stroke="#000" strokeWidth="2" />
-                    <line x1="15" y1="16" x2="105" y2="16" stroke="#000" strokeWidth="2" />
-                    <line x1="15" y1="44" x2="105" y2="44" stroke="#000" strokeWidth="2" />
-                    <ellipse cx="105" cy="30" rx="6" ry="14" fill="none" stroke="#000" strokeWidth="2" />
+                  <svg viewBox="0 0 80 120" className="w-20 h-30">
+                    {/* Vertical tapered cylinder standing upright */}
+                    {/* Top ellipse (narrower) */}
+                    <ellipse cx="40" cy="15" rx="22" ry="8" fill="none" stroke="#000" strokeWidth="2" />
 
-                    {/* Speaker grille opening */}
-                    <ellipse cx="15" cy="30" rx="4" ry="10" fill="none" stroke="#000" strokeWidth="1.5" />
+                    {/* Tapered sides - wider at bottom */}
+                    <line x1="18" y1="15" x2="10" y2="110" stroke="#000" strokeWidth="2" />
+                    <line x1="62" y1="15" x2="70" y2="110" stroke="#000" strokeWidth="2" />
 
-                    {/* Perforated holes - 3 rows */}
-                    {/* Top row */}
-                    <ellipse cx="35" cy="22" rx="3" ry="1.5" fill="#000" />
-                    <ellipse cx="50" cy="22" rx="3" ry="1.5" fill="#000" />
-                    <ellipse cx="65" cy="22" rx="3" ry="1.5" fill="#000" />
-                    <ellipse cx="80" cy="22" rx="3" ry="1.5" fill="#000" />
-                    <ellipse cx="95" cy="22" rx="3" ry="1.5" fill="#000" />
+                    {/* Bottom base (wider) */}
+                    <line x1="10" y1="110" x2="70" y2="110" stroke="#000" strokeWidth="2" />
 
-                    {/* Middle row */}
-                    <ellipse cx="35" cy="30" rx="3" ry="1.5" fill="#000" />
-                    <ellipse cx="50" cy="30" rx="3" ry="1.5" fill="#000" />
-                    <ellipse cx="65" cy="30" rx="3" ry="1.5" fill="#000" />
-                    <ellipse cx="80" cy="30" rx="3" ry="1.5" fill="#000" />
-                    <ellipse cx="95" cy="30" rx="3" ry="1.5" fill="#000" />
+                    {/* Speaker grille opening (top) */}
+                    <ellipse cx="40" cy="15" rx="18" ry="6" fill="none" stroke="#000" strokeWidth="1.5" />
+                    <line x1="28" y1="15" x2="52" y2="15" stroke="#000" strokeWidth="1" />
+                    <line x1="40" y1="11" x2="40" y2="19" stroke="#000" strokeWidth="1" />
 
-                    {/* Bottom row */}
-                    <ellipse cx="35" cy="38" rx="3" ry="1.5" fill="#000" />
-                    <ellipse cx="50" cy="38" rx="3" ry="1.5" fill="#000" />
-                    <ellipse cx="65" cy="38" rx="3" ry="1.5" fill="#000" />
-                    <ellipse cx="80" cy="38" rx="3" ry="1.5" fill="#000" />
-                    <ellipse cx="95" cy="38" rx="3" ry="1.5" fill="#000" />
+                    {/* Perforated holes - 4 columns × 4 rows arranged vertically */}
+                    {/* Row 1 (highest) */}
+                    <ellipse cx="22" cy="35" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="33" cy="35" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="47" cy="35" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="58" cy="35" rx="2" ry="4" fill="#000" />
+
+                    {/* Row 2 */}
+                    <ellipse cx="24" cy="55" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="35" cy="55" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="45" cy="55" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="56" cy="55" rx="2" ry="4" fill="#000" />
+
+                    {/* Row 3 */}
+                    <ellipse cx="26" cy="75" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="37" cy="75" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="43" cy="75" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="54" cy="75" rx="2" ry="4" fill="#000" />
+
+                    {/* Row 4 (lowest) */}
+                    <ellipse cx="28" cy="95" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="38" cy="95" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="42" cy="95" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="52" cy="95" rx="2" ry="4" fill="#000" />
                   </svg>
                 </div>
                 <h3 className="text-2xl font-bold text-black mb-2">Connecting to .dot...</h3>

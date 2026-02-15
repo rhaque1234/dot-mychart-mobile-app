@@ -1,151 +1,187 @@
+import { useState } from 'react'
+
 export default function ActivityScreen({ conversations, currentSession }) {
-  const events = currentSession?.events || []
-  const conversationEvents = events.filter(e => e.event_type === 'user_message' || e.event_type === 'agent_response')
+  const [currentMonth, setCurrentMonth] = useState(0)
 
-  const todayMessages = conversationEvents.length
-  const totalSessions = conversations.length
-
-  // Group events by date
-  const groupedByDate = conversationEvents.reduce((acc, event) => {
-    const date = new Date(event.timestamp).toLocaleDateString()
-    if (!acc[date]) {
-      acc[date] = []
+  // Calendar data - colored dots for each day
+  const calendarData = {
+    month: 'August 2021',
+    adherence: '95%',
+    days: [
+      null, null, null, null, null, null, 1, // Week 1
+      2, 3, 4, 5, 6, 7, 8, // Week 2
+      9, 10, 11, 12, 13, 14, 15, // Week 3
+      16, 17, 18, 19, 20, 21, 22, // Week 4
+      23, 24, 25, 26, 27, 28, 29, // Week 5
+      30, 31 // Week 6
+    ],
+    statuses: {
+      1: 'on-time', 2: 'on-time', 3: 'on-time', 4: 'on-time', 5: 'on-time', 6: 'on-time', 7: 'on-time',
+      8: 'on-time', 9: 'on-time', 10: 'on-time', 11: 'on-time', 12: 'on-time', 13: 'on-time', 14: 'on-time',
+      15: 'on-time', 16: 'on-time', 17: 'on-time', 18: 'missed', 19: 'on-time', 20: 'on-time', 21: 'on-time',
+      22: 'missed', 23: 'missed', 24: 'upcoming', 25: 'on-time', 26: 'upcoming', 27: 'upcoming', 28: 'upcoming',
+      29: 'upcoming', 30: 'upcoming', 31: 'upcoming'
     }
-    acc[date].push(event)
-    return acc
-  }, {})
+  }
 
-  const stats = [
-    { label: 'Total Conversations', value: totalSessions, icon: '💬' },
-    { label: 'Today\'s Messages', value: todayMessages, icon: '📝' },
-    { label: 'Avg Response Time', value: '< 1s', icon: '⚡' },
-    { label: 'Connection Uptime', value: '99%', icon: '✅' }
-  ]
+  const getStatusColor = (status) => {
+    switch (status) {
+      case 'on-time':
+      case 'late':
+        return 'bg-[#B4D455]'
+      case 'missed':
+        return 'bg-[#FF6B6B]'
+      case 'on-demand':
+        return 'bg-[#FFB84D]'
+      case 'upcoming':
+        return 'bg-gray-200'
+      default:
+        return 'bg-gray-100'
+    }
+  }
+
+  const summary = {
+    'On-time': { percent: 85, color: 'bg-[#B4D455]' },
+    'Late': { percent: 10, color: 'bg-[#B4D455]' },
+    'Missed': { percent: 3, color: 'bg-[#FF6B6B]' }
+  }
 
   return (
-    <div className="flex-1 overflow-auto bg-white pb-20">
+    <div className="flex-1 overflow-auto bg-[#FFF9F5] pb-20">
       {/* Header */}
-      <div className="bg-black text-white p-6 sticky top-0 z-10">
+      <div className="bg-gradient-to-br from-[#FFE5A8] via-[#FFF0C8] to-[#FFF9E5] px-6 pt-6 pb-4 sticky top-0 z-10">
         <div className="max-w-lg mx-auto">
-          <h1 className="text-2xl font-bold mb-1">Activity</h1>
-          <p className="text-gray-300 text-sm">Track your conversations with Dot</p>
+          <div className="flex items-center mb-6">
+            <button className="p-2 hover:bg-white/40 rounded-full transition-colors">
+              <svg className="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <h1 className="text-2xl font-bold text-gray-900 flex-1 text-center">Check-in Activity</h1>
+            <div className="w-10"></div>
+          </div>
+
+          {/* Month Navigation */}
+          <div className="flex items-center justify-between bg-white/40 backdrop-blur-sm rounded-2xl px-4 py-3">
+            <button
+              onClick={() => setCurrentMonth(currentMonth - 1)}
+              className="p-1 hover:bg-white/60 rounded-full transition-colors"
+            >
+              <svg className="w-5 h-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+            <div className="text-center">
+              <span className="text-lg font-semibold text-gray-900">{calendarData.month}: </span>
+              <span className="text-lg font-bold text-gray-900">{calendarData.adherence}</span>
+            </div>
+            <button
+              onClick={() => setCurrentMonth(currentMonth + 1)}
+              className="p-1 hover:bg-white/60 rounded-full transition-colors"
+            >
+              <svg className="w-5 h-5 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
         </div>
       </div>
 
       <div className="max-w-lg mx-auto px-6 py-6">
-        {/* Stats Grid */}
-        <div className="mb-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Overview</h2>
-          <div className="grid grid-cols-2 gap-3">
-            {stats.map((stat, index) => (
-              <div key={index} className="bg-gray-50 rounded-xl p-4 border border-gray-200">
-                <div className="text-2xl mb-2">{stat.icon}</div>
-                <div className="text-2xl font-bold text-black mb-1">{stat.value}</div>
-                <div className="text-xs text-gray-600">{stat.label}</div>
+        {/* Calendar Grid */}
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200 mb-6">
+          {/* Day Labels */}
+          <div className="grid grid-cols-7 gap-2 mb-4">
+            {['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'].map(day => (
+              <div key={day} className="text-center text-[10px] font-semibold text-gray-500">
+                {day}
+              </div>
+            ))}
+          </div>
+
+          {/* Calendar Days */}
+          <div className="grid grid-cols-7 gap-2">
+            {calendarData.days.map((day, index) => {
+              if (!day) {
+                return <div key={index} className="aspect-square"></div>
+              }
+
+              const status = calendarData.statuses[day]
+              const colorClass = getStatusColor(status)
+
+              return (
+                <button
+                  key={index}
+                  className={`aspect-square rounded-full ${colorClass} flex items-center justify-center font-semibold text-sm text-gray-900 hover:opacity-80 transition-opacity`}
+                >
+                  {day}
+                </button>
+              )
+            })}
+          </div>
+        </div>
+
+        {/* Legend */}
+        <div className="grid grid-cols-2 gap-3 mb-6">
+          <div className="bg-white rounded-2xl p-3 border border-gray-200">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded-full bg-[#B4D455]"></div>
+              <span className="text-xs text-gray-700">Med taken (On-time, Late)</span>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl p-3 border border-gray-200">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded-full bg-[#FF6B6B]"></div>
+              <span className="text-xs text-gray-700">Missed/Skipped</span>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl p-3 border border-gray-200">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded-full bg-[#FFB84D]"></div>
+              <span className="text-xs text-gray-700">On-demand</span>
+            </div>
+          </div>
+          <div className="bg-white rounded-2xl p-3 border border-gray-200">
+            <div className="flex items-center gap-2">
+              <div className="w-4 h-4 rounded-full bg-gray-200"></div>
+              <span className="text-xs text-gray-700">Unknown/Upcoming</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Adherence Summary */}
+        <div className="bg-white rounded-3xl p-6 shadow-sm border border-gray-200">
+          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4">ADHERENCE SUMMARY</h2>
+          <div className="space-y-4">
+            {Object.entries(summary).map(([label, data]) => (
+              <div key={label}>
+                <div className="flex items-center justify-between mb-2">
+                  <div className="flex items-center gap-2">
+                    <div className={`w-3 h-3 rounded ${data.color}`}></div>
+                    <span className="text-sm font-medium text-gray-700">{label}</span>
+                  </div>
+                  <span className="text-lg font-bold text-gray-900">{data.percent}%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div
+                    className={`${data.color} h-2 rounded-full transition-all duration-500`}
+                    style={{ width: `${data.percent}%` }}
+                  ></div>
+                </div>
               </div>
             ))}
           </div>
         </div>
 
-        {/* Recent Activity */}
-        <div className="mb-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Recent Activity</h2>
-
-          {Object.entries(groupedByDate).length === 0 ? (
-            <div className="bg-gray-50 rounded-xl p-8 text-center">
-              <div className="w-16 h-16 rounded-full bg-gray-200 flex items-center justify-center mx-auto mb-3">
-                <svg className="w-8 h-8 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-                </svg>
-              </div>
-              <p className="text-gray-600 text-sm">No activity yet</p>
-              <p className="text-gray-500 text-xs mt-1">Start chatting with Dot to see your activity</p>
-            </div>
-          ) : (
-            <div className="space-y-4">
-              {Object.entries(groupedByDate).reverse().map(([date, events]) => (
-                <div key={date} className="bg-white border border-gray-200 rounded-xl overflow-hidden">
-                  <div className="bg-gray-50 px-4 py-2 border-b border-gray-200">
-                    <div className="flex items-center justify-between">
-                      <span className="text-sm font-semibold text-gray-700">{date}</span>
-                      <span className="text-xs text-gray-500">{events.length} messages</span>
-                    </div>
-                  </div>
-                  <div className="p-4 space-y-3">
-                    {events.slice(0, 3).map((event, index) => {
-                      const isUser = event.event_type === 'user_message'
-                      return (
-                        <div key={index} className="flex items-start gap-3">
-                          <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                            isUser ? 'bg-gray-900' : 'bg-white border-2 border-black'
-                          }`}>
-                            {isUser ? (
-                              <svg className="w-4 h-4 text-white" fill="currentColor" viewBox="0 0 20 20">
-                                <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                              </svg>
-                            ) : (
-                              <svg className="w-4 h-4 text-black" fill="currentColor" viewBox="0 0 24 24">
-                                <circle cx="12" cy="12" r="8" />
-                              </svg>
-                            )}
-                          </div>
-                          <div className="flex-1 min-w-0">
-                            <div className="flex items-center gap-2 mb-1">
-                              <span className="text-xs font-semibold text-gray-700">
-                                {isUser ? 'You' : 'Dot'}
-                              </span>
-                              <span className="text-xs text-gray-500">
-                                {new Date(event.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
-                              </span>
-                            </div>
-                            <p className="text-sm text-gray-600 line-clamp-2">{event.content}</p>
-                          </div>
-                        </div>
-                      )
-                    })}
-                    {events.length > 3 && (
-                      <div className="text-center pt-2 border-t border-gray-100">
-                        <span className="text-xs text-gray-500">+{events.length - 3} more messages</span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Health Insights */}
-        <div>
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Health Insights</h2>
-          <div className="space-y-3">
-            <div className="bg-black text-white rounded-xl p-4">
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">💪</div>
-                <div className="flex-1">
-                  <h3 className="font-semibold mb-1">Great progress!</h3>
-                  <p className="text-sm text-gray-300">
-                    You've been actively engaging with Dot. Keep up the healthy habits!
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="bg-gray-50 border border-gray-200 rounded-xl p-4">
-              <div className="flex items-start gap-3">
-                <div className="text-2xl">🎯</div>
-                <div className="flex-1">
-                  <h3 className="font-semibold text-gray-900 mb-1">Daily Goal</h3>
-                  <div className="flex items-center gap-2 mb-2">
-                    <div className="flex-1 bg-gray-200 rounded-full h-2">
-                      <div className="bg-black rounded-full h-2" style={{ width: '75%' }}></div>
-                    </div>
-                    <span className="text-xs text-gray-600 font-medium">75%</span>
-                  </div>
-                  <p className="text-xs text-gray-600">3 of 4 check-ins completed</p>
-                </div>
-              </div>
-            </div>
+        {/* Additional Stats */}
+        <div className="grid grid-cols-2 gap-4 mt-6">
+          <div className="bg-gradient-to-br from-[#FFD4B8] to-[#FFE5D4] rounded-2xl p-6 text-center">
+            <div className="text-3xl font-bold text-gray-900 mb-1">26</div>
+            <div className="text-sm text-gray-700">Days tracked</div>
+          </div>
+          <div className="bg-gradient-to-br from-[#B4D455] to-[#C8E46E] rounded-2xl p-6 text-center">
+            <div className="text-3xl font-bold text-gray-900 mb-1">14</div>
+            <div className="text-sm text-gray-900">Current streak</div>
           </div>
         </div>
       </div>

@@ -1,123 +1,166 @@
-export default function HomeScreen({ onNavigate, isConnected, messageCount, onEmergencyClick }) {
-  const quickActions = [
+export default function HomeScreen({ onNavigate, isConnected, messageCount, onEmergencyClick, currentSession }) {
+  // Get greeting based on time of day
+  const getGreeting = () => {
+    const hour = new Date().getHours()
+    if (hour < 12) return 'Good morning'
+    if (hour < 18) return 'Good afternoon'
+    return 'Good evening'
+  }
+
+  // Get recent conversations
+  const events = currentSession?.events || []
+  const conversationEvents = events.filter(e => e.event_type === 'user_message' || e.event_type === 'agent_response')
+
+  const todayConversations = [
     {
-      id: 'chat',
-      title: 'Chat with Dot',
-      description: 'Start a conversation',
-      icon: (
-        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
-        </svg>
-      ),
-      action: () => onNavigate('chat')
+      time: '10:00 AM',
+      messages: 5,
+      status: 'completed',
+      completedAt: '10:15 AM',
+      dot: '🟢'
     },
     {
-      id: 'activity',
-      title: 'View Activity',
-      description: 'See your history',
-      icon: (
-        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
-        </svg>
-      ),
-      action: () => onNavigate('activity')
+      time: '2:00 PM',
+      messages: 3,
+      status: 'missed',
+      completedAt: '2:45 PM',
+      dot: '🔴'
     }
   ]
 
   return (
-    <div className="flex-1 overflow-auto bg-white">
-      {/* Hero Section */}
-      <div className="bg-black text-white p-6 pb-8">
+    <div className="flex-1 overflow-auto bg-[#FFF9F5]">
+      {/* Hero Section with Gradient */}
+      <div className="bg-gradient-to-br from-[#FFD4B8] via-[#FFE5D4] to-[#FFF0E5] px-6 pt-6 pb-8">
         <div className="max-w-lg mx-auto">
-          <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center justify-between mb-8">
             <div>
-              <h1 className="text-2xl font-bold mb-1">Hello!</h1>
-              <p className="text-gray-300 text-sm">How can Dot help you today?</p>
+              <h1 className="text-2xl font-semibold text-gray-800">{getGreeting()}, John</h1>
             </div>
-            <div className="w-16 h-16 rounded-full bg-white/10 backdrop-blur-sm flex items-center justify-center">
-              <svg className="w-10 h-10 text-white" fill="currentColor" viewBox="0 0 24 24">
-                <circle cx="12" cy="12" r="10" />
+            <button className="w-12 h-12 rounded-full bg-white/60 backdrop-blur-sm flex items-center justify-center shadow-sm">
+              <svg className="w-6 h-6 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
               </svg>
-            </div>
+            </button>
           </div>
 
-          {/* Status Badge */}
-          <div className="flex items-center gap-2 text-sm">
-            <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-400' : 'bg-red-400'} animate-pulse`}></div>
-            <span>{isConnected ? 'Connected to Dot' : 'Connecting...'}</span>
+          {/* Next Check-in Card */}
+          <div className="bg-white/40 backdrop-blur-sm rounded-3xl p-6 shadow-sm border border-white/60">
+            <p className="text-xs font-semibold text-gray-600 uppercase tracking-wide mb-2">NEXT CHECK-IN:</p>
+            <div className="text-6xl font-bold text-gray-900 mb-2">4:00 PM</div>
+            <button
+              onClick={() => onNavigate('chat')}
+              className="flex items-center gap-2 text-gray-700"
+            >
+              <span className="text-base font-medium">Ready to chat with Dot</span>
+              <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
         </div>
       </div>
 
-      <div className="max-w-lg mx-auto px-6 -mt-4">
-        {/* Quick Stats */}
-        <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">Today's Summary</h2>
-          <div className="grid grid-cols-2 gap-4">
-            <div className="text-center p-4 bg-gray-50 rounded-xl">
-              <div className="text-3xl font-bold text-black mb-1">{messageCount}</div>
-              <div className="text-xs text-gray-600">Messages</div>
+      {/* Earlier Today Section */}
+      <div className="max-w-lg mx-auto px-6 py-6">
+        <div className="flex items-center justify-between mb-4">
+          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wide">EARLIER TODAY</h2>
+          <button className="p-1">
+            <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+            </svg>
+          </button>
+        </div>
+
+        <div className="space-y-3 mb-8">
+          <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
+            <div>
+              <div className="font-semibold text-gray-900 mb-1">10:00 AM</div>
+              <div className="text-sm text-gray-600">5 messages</div>
             </div>
-            <div className="text-center p-4 bg-gray-50 rounded-xl">
-              <div className="text-3xl font-bold text-black mb-1">
-                {isConnected ? '100%' : '0%'}
+            <div className="text-right flex items-center gap-3">
+              <div>
+                <div className="text-sm text-gray-600 mb-1">Completed (10:15am)</div>
               </div>
-              <div className="text-xs text-gray-600">Connection</div>
+              <div className="w-3 h-3 rounded-full bg-[#B4D455]"></div>
+            </div>
+          </div>
+
+          <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
+            <div>
+              <div className="font-semibold text-gray-900 mb-1">2:00 PM</div>
+              <div className="text-sm text-gray-600">Scheduled check-in</div>
+            </div>
+            <div className="text-right flex items-center gap-3">
+              <div>
+                <div className="text-sm text-gray-600 mb-1">Missed (2:45pm)</div>
+              </div>
+              <div className="w-3 h-3 rounded-full bg-[#FF6B6B]"></div>
+            </div>
+          </div>
+        </div>
+
+        {/* Yesterday Section */}
+        <div>
+          <h2 className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-4">YESTERDAY</h2>
+          <div className="space-y-3 mb-6">
+            <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
+              <div>
+                <div className="font-semibold text-gray-900 mb-1">8:00 PM</div>
+                <div className="text-sm text-gray-600">3 messages</div>
+              </div>
+              <div className="text-right flex items-center gap-3">
+                <div>
+                  <div className="text-sm text-gray-600 mb-1">Completed (8:10pm)</div>
+                </div>
+                <div className="w-3 h-3 rounded-full bg-[#B4D455]"></div>
+              </div>
+            </div>
+
+            <div className="bg-white rounded-2xl p-4 shadow-sm border border-gray-100 flex items-center justify-between">
+              <div>
+                <div className="font-semibold text-gray-900 mb-1">12:00 PM</div>
+                <div className="text-sm text-gray-600">4 messages</div>
+              </div>
+              <div className="text-right flex items-center gap-3">
+                <div>
+                  <div className="text-sm text-gray-600 mb-1">Completed (12:15pm)</div>
+                </div>
+                <div className="w-3 h-3 rounded-full bg-[#B4D455]"></div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* Quick Actions */}
-        <div className="mb-6">
-          <h2 className="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">Quick Actions</h2>
-          <div className="space-y-3">
-            {quickActions.map((action) => (
-              <button
-                key={action.id}
-                onClick={action.action}
-                className="w-full bg-white border-2 border-gray-200 rounded-xl p-4 flex items-center gap-4 hover:border-black hover:shadow-md transition-all active:scale-98"
-              >
-                <div className="text-black">
-                  {action.icon}
-                </div>
-                <div className="flex-1 text-left">
-                  <div className="font-semibold text-black">{action.title}</div>
-                  <div className="text-sm text-gray-600">{action.description}</div>
-                </div>
-                <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </button>
-            ))}
-          </div>
-        </div>
-
-        {/* Emergency Button */}
-        <button
-          onClick={onEmergencyClick}
-          className="w-full bg-black text-white rounded-xl p-6 flex items-center justify-center gap-3 hover:bg-gray-900 transition-all shadow-lg mb-6"
-        >
-          <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-          </svg>
-          <span className="font-semibold text-lg">Alert Nurse</span>
-        </button>
-
-        {/* Health Tip */}
-        <div className="bg-gray-50 rounded-xl p-4 mb-20">
-          <div className="flex items-start gap-3">
-            <div className="w-8 h-8 rounded-full bg-black text-white flex items-center justify-center flex-shrink-0">
-              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-              </svg>
+        <div className="space-y-3 mb-20">
+          <button
+            onClick={() => onNavigate('activity')}
+            className="w-full bg-white border-2 border-gray-200 rounded-2xl p-4 flex items-center justify-between hover:border-[#FFD4B8] transition-all"
+          >
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-[#FFD4B8] to-[#FFE5D4] flex items-center justify-center">
+                <span className="text-xl">📊</span>
+              </div>
+              <div className="text-left">
+                <div className="font-semibold text-gray-900">View Insights</div>
+                <div className="text-sm text-gray-600">Check your progress</div>
+              </div>
             </div>
-            <div>
-              <h3 className="font-semibold text-black mb-1">Daily Tip</h3>
-              <p className="text-sm text-gray-600">
-                Remember to stay hydrated throughout the day. Dot can remind you to drink water regularly!
-              </p>
-            </div>
-          </div>
+            <svg className="w-5 h-5 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+            </svg>
+          </button>
+
+          <button
+            onClick={onEmergencyClick}
+            className="w-full bg-gradient-to-r from-[#FF6B6B] to-[#FF8787] text-white rounded-2xl p-4 flex items-center justify-center gap-3 shadow-lg hover:shadow-xl transition-all"
+          >
+            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+            </svg>
+            <span className="font-semibold text-lg">Alert Nurse</span>
+          </button>
         </div>
       </div>
     </div>

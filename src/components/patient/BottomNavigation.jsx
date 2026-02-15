@@ -39,27 +39,36 @@ export default function BottomNavigation({ activeScreen, onNavigate }) {
   ]
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-900 safe-area-bottom z-50">
-      <div className="flex items-center justify-around h-16 max-w-lg mx-auto">
+    <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 safe-area-bottom z-50 shadow-lg">
+      <div className="flex items-center justify-around h-20 max-w-lg mx-auto px-4">
+        {/* .dot branding indicator */}
+        <div className="absolute top-2 left-1/2 transform -translate-x-1/2 flex gap-1">
+          <div className="w-1.5 h-1.5 rounded-full bg-gray-200"></div>
+          <div className="w-1.5 h-1.5 rounded-full bg-gray-200"></div>
+          <div className="w-1.5 h-1.5 rounded-full bg-gray-200"></div>
+        </div>
+
         {navItems.map((item) => (
           <button
             key={item.id}
             onClick={() => onNavigate(item.id)}
-            className={`flex flex-col items-center justify-center flex-1 h-full transition-all ${
+            className={`flex flex-col items-center justify-center flex-1 h-full transition-all relative ${
               activeScreen === item.id
                 ? 'text-gray-900'
                 : 'text-gray-400 hover:text-gray-600'
             }`}
           >
+            {/* Active indicator - rounded pill */}
+            {activeScreen === item.id && (
+              <div className="absolute inset-x-2 inset-y-3 bg-gray-50 rounded-[20px] border border-gray-200 -z-10"></div>
+            )}
+
             <div className={`transition-transform ${activeScreen === item.id ? 'scale-110 -translate-y-0.5' : ''}`}>
               {item.icon(activeScreen === item.id)}
             </div>
             <span className={`text-[10px] mt-1 font-bold uppercase tracking-wide ${activeScreen === item.id ? 'font-extrabold' : ''}`}>
               {item.label}
             </span>
-            {activeScreen === item.id && (
-              <div className="absolute bottom-0 left-0 right-0 h-1 bg-gray-900"></div>
-            )}
           </button>
         ))}
       </div>

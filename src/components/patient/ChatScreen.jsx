@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { conversationTopics, recentMessages } from '../../lib/mockPatientData'
+import { conversationTopics } from '../../lib/mockPatientData'
 
 export default function ChatScreen({ currentSession, isConnected }) {
   const messagesEndRef = useRef(null)
@@ -60,7 +60,7 @@ export default function ChatScreen({ currentSession, isConnected }) {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-auto pb-32">
+      <div className="flex-1 overflow-auto pb-28">
         {activeTab === 'topics' ? (
           <div className="max-w-md mx-auto px-8 pt-8">
             <div className="mb-8">
@@ -170,36 +170,52 @@ export default function ChatScreen({ currentSession, isConnected }) {
               </div>
             ) : conversationEvents.length === 0 ? (
               <div className="flex flex-col items-center justify-center h-full text-center p-8">
-                <div className="w-24 h-24 border-2 border-black flex items-center justify-center mb-12">
-                  <svg className="w-12 h-12 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="square" strokeLinejoin="miter" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                <div className="mb-8">
+                  <svg viewBox="0 0 80 120" className="w-20 h-30">
+                    {/* Vertical tapered cylinder standing upright */}
+                    {/* Top ellipse (narrower) */}
+                    <ellipse cx="40" cy="15" rx="22" ry="8" fill="none" stroke="#000" strokeWidth="2" />
+
+                    {/* Tapered sides - wider at bottom */}
+                    <line x1="18" y1="15" x2="10" y2="110" stroke="#000" strokeWidth="2" />
+                    <line x1="62" y1="15" x2="70" y2="110" stroke="#000" strokeWidth="2" />
+
+                    {/* Bottom base (wider) */}
+                    <line x1="10" y1="110" x2="70" y2="110" stroke="#000" strokeWidth="2" />
+
+                    {/* Speaker grille opening (top) */}
+                    <ellipse cx="40" cy="15" rx="18" ry="6" fill="none" stroke="#000" strokeWidth="1.5" />
+                    <line x1="28" y1="15" x2="52" y2="15" stroke="#000" strokeWidth="1" />
+                    <line x1="40" y1="11" x2="40" y2="19" stroke="#000" strokeWidth="1" />
+
+                    {/* Perforated holes - 4 columns × 4 rows arranged vertically */}
+                    {/* Row 1 (highest) */}
+                    <ellipse cx="22" cy="35" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="33" cy="35" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="47" cy="35" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="58" cy="35" rx="2" ry="4" fill="#000" />
+
+                    {/* Row 2 */}
+                    <ellipse cx="24" cy="55" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="35" cy="55" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="45" cy="55" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="56" cy="55" rx="2" ry="4" fill="#000" />
+
+                    {/* Row 3 */}
+                    <ellipse cx="26" cy="75" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="37" cy="75" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="43" cy="75" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="54" cy="75" rx="2" ry="4" fill="#000" />
+
+                    {/* Row 4 (lowest) */}
+                    <ellipse cx="28" cy="95" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="38" cy="95" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="42" cy="95" rx="2" ry="4" fill="#000" />
+                    <ellipse cx="52" cy="95" rx="2" ry="4" fill="#000" />
                   </svg>
                 </div>
                 <h3 className="text-2xl font-bold text-black mb-3">Say "Hey .dot" to start</h3>
-                <p className="text-sm text-gray-600 mb-12">Your conversations will appear here</p>
-
-                {/* Recent Messages Preview */}
-                <div className="w-full max-w-md">
-                  <h4 className="text-sm font-medium text-gray-600 uppercase tracking-wider mb-4 text-left">Recent Messages</h4>
-                  <div className="space-y-3">
-                    {recentMessages.map((msg) => (
-                      <div key={msg.id} className="border-2 border-gray-300 p-4 text-left">
-                        <div className="flex items-start justify-between mb-2">
-                          <span className="font-bold text-black">{msg.from}</span>
-                          <span className="text-xs text-gray-600">{msg.displayTime}</span>
-                        </div>
-                        <p className="text-sm text-gray-700">{msg.message}</p>
-                        {!msg.isRead && (
-                          <div className="mt-2">
-                            <span className="inline-block px-2 py-1 bg-black text-xs font-bold text-white">
-                              New
-                            </span>
-                          </div>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                </div>
+                <p className="text-sm text-gray-600">Your conversations will appear here</p>
               </div>
             ) : (
               <div className="max-w-md mx-auto space-y-6">

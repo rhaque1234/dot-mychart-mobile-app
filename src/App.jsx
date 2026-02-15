@@ -2,7 +2,7 @@
  * Smart FHIR Dashboard Application
  * SMART on FHIR enabled patient dashboard with OAuth2 integration
  */
-import { BrowserRouter, Routes, Route } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import LaunchPage from './pages/LaunchPage'
 import RedirectPage from './pages/RedirectPage'
 import DemoPage from './pages/DemoPage'
@@ -15,7 +15,8 @@ function App() {
         <Route path="/launch" element={<LaunchPage />} />
         <Route path="/demo" element={<DemoPage />} />
         <Route path="/patient-app" element={<PatientApp />} />
-        <Route path="/" element={<RedirectPage />} />
+        <Route path="/redirect" element={<RedirectPage />} />
+        <Route path="/" element={<Navigate to="/patient-app" replace />} />
       </Routes>
     </BrowserRouter>
   )

@@ -38,17 +38,36 @@ export default function HomeScreen({ onNavigate, isConnected, messageCount, onEm
             <circle cx="95" cy="165" r="3" fill="#000" />
             <circle cx="100" cy="170" r="2" fill="#000" />
 
-            {/* .dot device (tall cylinder) */}
-            <rect x="170" y="80" width="60" height="100" rx="8" fill="none" stroke="#000" strokeWidth="2.5" />
-            <rect x="180" y="95" width="40" height="20" rx="2" fill="none" stroke="#000" strokeWidth="2" />
-            <circle cx="200" cy="130" r="12" fill="none" stroke="#000" strokeWidth="2" />
-            <rect x="185" y="155" width="30" height="15" rx="3" fill="none" stroke="#000" strokeWidth="2" />
-            {/* Dot perforations */}
-            <circle cx="178" cy="165" r="2" fill="#000" />
-            <circle cx="188" cy="165" r="2" fill="#000" />
-            <circle cx="198" cy="165" r="2" fill="#000" />
-            <circle cx="208" cy="165" r="2" fill="#000" />
-            <circle cx="218" cy="165" r="2" fill="#000" />
+            {/* .dot device (horizontal cylinder with perforations) */}
+            {/* Main cylinder body */}
+            <ellipse cx="165" cy="130" rx="8" ry="18" fill="none" stroke="#000" strokeWidth="2" />
+            <line x1="165" y1="112" x2="225" y2="112" stroke="#000" strokeWidth="2" />
+            <line x1="165" y1="148" x2="225" y2="148" stroke="#000" strokeWidth="2" />
+            <ellipse cx="225" cy="130" rx="8" ry="18" fill="none" stroke="#000" strokeWidth="2" />
+
+            {/* Speaker grille opening (left end) */}
+            <ellipse cx="165" cy="130" rx="6" ry="14" fill="none" stroke="#000" strokeWidth="1.5" />
+            <line x1="159" y1="130" x2="171" y2="130" stroke="#000" strokeWidth="1" />
+            <line x1="165" y1="120" x2="165" y2="140" stroke="#000" strokeWidth="1" />
+
+            {/* Perforated holes - 3 rows of oval holes */}
+            {/* Top row */}
+            <ellipse cx="180" cy="120" rx="3" ry="1.5" fill="#000" />
+            <ellipse cx="190" cy="120" rx="3" ry="1.5" fill="#000" />
+            <ellipse cx="200" cy="120" rx="3" ry="1.5" fill="#000" />
+            <ellipse cx="210" cy="120" rx="3" ry="1.5" fill="#000" />
+
+            {/* Middle row */}
+            <ellipse cx="180" cy="130" rx="3" ry="1.5" fill="#000" />
+            <ellipse cx="190" cy="130" rx="3" ry="1.5" fill="#000" />
+            <ellipse cx="200" cy="130" rx="3" ry="1.5" fill="#000" />
+            <ellipse cx="210" cy="130" rx="3" ry="1.5" fill="#000" />
+
+            {/* Bottom row */}
+            <ellipse cx="180" cy="140" rx="3" ry="1.5" fill="#000" />
+            <ellipse cx="190" cy="140" rx="3" ry="1.5" fill="#000" />
+            <ellipse cx="200" cy="140" rx="3" ry="1.5" fill="#000" />
+            <ellipse cx="210" cy="140" rx="3" ry="1.5" fill="#000" />
 
             {/* Phone */}
             <rect x="260" y="140" width="35" height="40" rx="3" fill="none" stroke="#000" strokeWidth="2" />

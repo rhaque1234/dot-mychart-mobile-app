@@ -121,8 +121,39 @@ export default function ChatScreen({ currentSession, isConnected }) {
           <div className="flex-1 px-8 pt-8">
             {!isConnected ? (
               <div className="flex flex-col items-center justify-center h-full text-center p-8">
-                <div className="w-24 h-24 border-2 border-black flex items-center justify-center mb-8">
-                  <div className="w-16 h-16 border-2 border-black animate-pulse"></div>
+                <div className="mb-8 animate-pulse">
+                  <svg viewBox="0 0 120 60" className="w-32 h-16">
+                    {/* Horizontal cylinder body */}
+                    <ellipse cx="15" cy="30" rx="6" ry="14" fill="none" stroke="#000" strokeWidth="2" />
+                    <line x1="15" y1="16" x2="105" y2="16" stroke="#000" strokeWidth="2" />
+                    <line x1="15" y1="44" x2="105" y2="44" stroke="#000" strokeWidth="2" />
+                    <ellipse cx="105" cy="30" rx="6" ry="14" fill="none" stroke="#000" strokeWidth="2" />
+
+                    {/* Speaker grille opening */}
+                    <ellipse cx="15" cy="30" rx="4" ry="10" fill="none" stroke="#000" strokeWidth="1.5" />
+
+                    {/* Perforated holes - 3 rows */}
+                    {/* Top row */}
+                    <ellipse cx="35" cy="22" rx="3" ry="1.5" fill="#000" />
+                    <ellipse cx="50" cy="22" rx="3" ry="1.5" fill="#000" />
+                    <ellipse cx="65" cy="22" rx="3" ry="1.5" fill="#000" />
+                    <ellipse cx="80" cy="22" rx="3" ry="1.5" fill="#000" />
+                    <ellipse cx="95" cy="22" rx="3" ry="1.5" fill="#000" />
+
+                    {/* Middle row */}
+                    <ellipse cx="35" cy="30" rx="3" ry="1.5" fill="#000" />
+                    <ellipse cx="50" cy="30" rx="3" ry="1.5" fill="#000" />
+                    <ellipse cx="65" cy="30" rx="3" ry="1.5" fill="#000" />
+                    <ellipse cx="80" cy="30" rx="3" ry="1.5" fill="#000" />
+                    <ellipse cx="95" cy="30" rx="3" ry="1.5" fill="#000" />
+
+                    {/* Bottom row */}
+                    <ellipse cx="35" cy="38" rx="3" ry="1.5" fill="#000" />
+                    <ellipse cx="50" cy="38" rx="3" ry="1.5" fill="#000" />
+                    <ellipse cx="65" cy="38" rx="3" ry="1.5" fill="#000" />
+                    <ellipse cx="80" cy="38" rx="3" ry="1.5" fill="#000" />
+                    <ellipse cx="95" cy="38" rx="3" ry="1.5" fill="#000" />
+                  </svg>
                 </div>
                 <h3 className="text-2xl font-bold text-black mb-2">Connecting to .dot...</h3>
                 <p className="text-sm text-gray-600">Please wait while we establish connection</p>

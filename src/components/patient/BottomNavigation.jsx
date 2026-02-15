@@ -39,36 +39,41 @@ export default function BottomNavigation({ activeScreen, onNavigate }) {
   ]
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-md border-t border-gray-200 safe-area-bottom z-50 shadow-lg">
-      <div className="flex items-center justify-around h-20 max-w-lg mx-auto px-4">
-        {/* .dot branding indicator */}
-        <div className="absolute top-2 left-1/2 transform -translate-x-1/2 flex gap-1">
-          <div className="w-1.5 h-1.5 rounded-full bg-gray-200"></div>
-          <div className="w-1.5 h-1.5 rounded-full bg-gray-200"></div>
-          <div className="w-1.5 h-1.5 rounded-full bg-gray-200"></div>
-        </div>
-
+    <nav className="fixed bottom-0 left-0 right-0 bg-[#FFFEF7] border-t-2 border-black safe-area-bottom z-50">
+      <div className="flex items-center justify-around h-20 max-w-md mx-auto px-6">
         {navItems.map((item) => (
           <button
             key={item.id}
             onClick={() => onNavigate(item.id)}
-            className={`flex flex-col items-center justify-center flex-1 h-full transition-all relative ${
+            className={`flex flex-col items-center justify-center flex-1 h-full transition-all ${
               activeScreen === item.id
-                ? 'text-gray-900'
-                : 'text-gray-400 hover:text-gray-600'
+                ? 'text-black'
+                : 'text-gray-600 hover:text-black'
             }`}
           >
-            {/* Active indicator - rounded pill */}
-            {activeScreen === item.id && (
-              <div className="absolute inset-x-2 inset-y-3 bg-gray-50 rounded-[20px] border border-gray-200 -z-10"></div>
-            )}
-
-            <div className={`transition-transform ${activeScreen === item.id ? 'scale-110 -translate-y-0.5' : ''}`}>
-              {item.icon(activeScreen === item.id)}
+            <div>
+              <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={activeScreen === item.id ? 2.5 : 2}>
+                {item.id === 'home' && (
+                  <path strokeLinecap="square" strokeLinejoin="miter" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+                )}
+                {item.id === 'chat' && (
+                  <path strokeLinecap="square" strokeLinejoin="miter" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+                )}
+                {item.id === 'insights' && (
+                  <path strokeLinecap="square" strokeLinejoin="miter" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                )}
+                {item.id === 'activity' && (
+                  <path strokeLinecap="square" strokeLinejoin="miter" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                )}
+              </svg>
             </div>
-            <span className={`text-[10px] mt-1 font-bold uppercase tracking-wide ${activeScreen === item.id ? 'font-extrabold' : ''}`}>
+            <span className={`text-[9px] mt-1.5 uppercase tracking-wider ${activeScreen === item.id ? 'font-bold' : 'font-medium'}`}>
               {item.label}
             </span>
+            {/* Active indicator - simple underline */}
+            {activeScreen === item.id && (
+              <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-black"></div>
+            )}
           </button>
         ))}
       </div>

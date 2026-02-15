@@ -60,7 +60,7 @@ export default function ChatScreen({ currentSession, isConnected }) {
       </div>
 
       {/* Content */}
-      <div className="flex-1 overflow-auto pb-28">
+      <div className="flex-1 overflow-auto pb-20">
         {activeTab === 'topics' ? (
           <div className="max-w-md mx-auto px-8 pt-8">
             <div className="mb-8">
@@ -165,7 +165,7 @@ export default function ChatScreen({ currentSession, isConnected }) {
                     <ellipse cx="52" cy="95" rx="2" ry="4" fill="#000" />
                   </svg>
                 </div>
-                <h3 className="text-2xl font-bold text-black mb-2">Connecting to .dot...</h3>
+                <h3 className="text-2xl font-bold text-black mb-2">Say hey dot to start</h3>
                 <p className="text-sm text-gray-600">Please wait while we establish connection</p>
               </div>
             ) : conversationEvents.length === 0 ? (
@@ -276,7 +276,7 @@ export default function ChatScreen({ currentSession, isConnected }) {
 
       {/* Voice Input - minimal with black border - positioned higher */}
       {activeTab === 'messages' && (
-        <div className="border-t-2 border-black bg-[#FFFEF7] p-4">
+        <div className="border-t-2 border-black bg-[#FFFEF7] px-4 pt-3 pb-20">
           <div className="max-w-md mx-auto">
             <div className="flex items-center gap-4 border-2 border-black px-6 py-4">
               <svg className="w-6 h-6 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>

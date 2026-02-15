@@ -31,14 +31,14 @@ function formatDate(date) {
 // Patient demographics
 export const patientData = {
   id: 'patient-001',
-  name: 'Sarah Martinez',
-  firstName: 'Sarah',
+  name: 'Raiyan Haque',
+  firstName: 'Raiyan',
   birthDate: '1978-05-15',
   age: 47,
-  gender: 'female',
+  gender: 'male',
   mrn: 'MRN-8472651',
   phone: '(555) 234-5678',
-  email: 'sarah.martinez@email.com'
+  email: 'raiyan.haque@email.com'
 }
 
 // Medication schedule with adherence tracking
